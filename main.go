@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -146,11 +147,15 @@ func main() {
 
 	// Start the server in a goroutine
 	go func() {
+		fmt.Printf("Starting server on port %s...\n", port)
 		log.Printf("Starting server on port %s...\n", port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Server failed: %v", err)
 		}
 	}()
+
+	// Wait for a moment to ensure the log is flushed
+	time.Sleep(100 * time.Millisecond)
 
 	// Set up channel to wait for an interrupt or termination signal
 	quit := make(chan os.Signal, 1)
